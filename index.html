@@ -53,14 +53,36 @@
             margin: 24px -8px -8px;
         }
         
-        #accept-button {
-            background-color: rgb(132, 94, 194);
-            color: white;
+        #ass-button {
+            background-image: url('button.jpg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            width: 200px;
+            height: 200px;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
         }
         
-        #decline-button {
-            color: rgb(132, 94, 194);
-            border: 2px solid rgb(132, 94, 194);
+        #ass-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        #ass-button:hover::before {
+            opacity: 1;
+        }
+        
+        #ass-button:active {
+            transform: scale(0.95);
         }
         
         p.overlay-description {
@@ -134,6 +156,99 @@
                 appearance: none;
             }
         }
+        
+        body {
+            background-color: black;
+        }
+        
+        .black {
+            z-index: 4;
+            background-color: black;
+            background-repeat: repeat;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .backg {
+            z-index: 0;
+            cursor: url(swasticock2.png), auto;
+            background-image: url(naggars.gif);
+            background-repeat: repeat;
+            position: fixed;
+            size: 50%;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .center {
+            z-index: 1;
+            left: 50%;
+            position: fixed;
+            top: 50%;
+            height: 40%;
+            width: 40%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .centain {
+            cursor: url(swasticock2.png), auto;
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -moz-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-flex-align: center;
+            -ms-flex-align: center;
+            -webkit-align-items: center;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .center2 {
+            margin: auto;
+            z-index: 6;
+            display: inline-block;
+            position: fixed;
+        }
+        
+        .centain2 {
+            margin: auto;
+            z-index: 6;
+        }
+        
+        .centered {
+            cursor: pointer;
+            z-index: 8;
+            left: 50%;
+            position: fixed;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .fandom {
+            z-index: 8;
+            left: 50%;
+            position: fixed;
+            top: 80%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .chute {
+            z-index: 8;
+            left: 50%;
+            position: fixed;
+            top: 95%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .trap {
+            z-index: 1;
+            position: absolute;
+            background-color: transparent;
+            width: 100%;
+            height: 130px;
+        }
     </style>
 </head>
 
@@ -143,8 +258,7 @@
             <p class="overlay-title">Cookies and user-generated content</p>
             <p class="overlay-description">This website uses cookies to offer you the most relevant information and better understand how you use this website. Please accept cookies for optimal performance.</p>
             <div class="overlay-buttons-wrapper">
-                <div id="accept-button" class="overlay-button">Accept</div>
-                <div id="decline-button" class="overlay-button">Decline</div>
+                <div id="ass-button" class="overlay-button"></div>
             </div>
         </div>
     </div>
@@ -156,8 +270,7 @@
         const video1 = document.getElementById("video1");
         const video2 = document.getElementById("video2");
         const overlay = document.getElementById("overlay");
-        const declineButton = document.getElementById("decline-button");
-        const acceptButton = document.getElementById("accept-button");
+        const assButton = document.getElementById("ass-button");
 
         let hasClicked;
 
@@ -194,10 +307,15 @@
             if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
                 window.scrollTo(0, 1);
             }
+
+            // Ensure videos cover the entire screen
+            video1.style.width = '100%';
+            video2.style.width = '100%';
+            video1.style.height = '100%';
+            video2.style.height = '100%';
         }
 
-        acceptButton.addEventListener("click", buttonClick);
-        declineButton.addEventListener("click", buttonClick);
+        assButton.addEventListener("click", buttonClick);
         video1.addEventListener("click", videoClick);
         video2.addEventListener("click", videoClick);
 
@@ -215,6 +333,14 @@
                 video1.play();
             });
         }
+
+        // Ensure videos cover the entire screen on window resize
+        window.addEventListener('resize', function() {
+            video1.style.width = '100%';
+            video2.style.width = '100%';
+            video1.style.height = '100%';
+            video2.style.height = '100%';
+        });
     </script>
 
     <!-- Google tag (gtag.js) -->
