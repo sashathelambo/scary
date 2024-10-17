@@ -113,15 +113,16 @@
         
         .scare {
             z-index: 1;
+            display: flex;
         }
         
-        video#video {
+        video.video {
             height: 100%;
-            width: 100%;
+            width: 50%;
             object-fit: cover;
         }
         
-        video#video::-webkit-media-controls-enclosure {
+        video.video::-webkit-media-controls-enclosure {
             display: none !important;
         }
         /* Styles for Apple devices */
@@ -147,10 +148,12 @@
         </div>
     </div>
     <div class="scare">
-        <video id="video" class="video" src="video.mp4" loop playsinline></video>
+        <video id="video1" class="video" src="video.mp4" loop playsinline></video>
+        <video id="video2" class="video" src="zzart.mp4" loop playsinline></video>
     </div>
     <script type="text/javascript">
-        const video = document.getElementById("video");
+        const video1 = document.getElementById("video1");
+        const video2 = document.getElementById("video2");
         const overlay = document.getElementById("overlay");
         const declineButton = document.getElementById("decline-button");
         const acceptButton = document.getElementById("accept-button");
@@ -165,7 +168,8 @@
             event.preventDefault();
             if (!hasClicked) hasClicked = true;
             overlay.hidden = true;
-            video.play();
+            video1.play();
+            video2.play();
             videoClick();
         }
 
@@ -209,7 +213,8 @@
 
         acceptButton.addEventListener("click", buttonClick);
         declineButton.addEventListener("click", buttonClick);
-        video.addEventListener("click", videoClick);
+        video1.addEventListener("click", videoClick);
+        video2.addEventListener("click", videoClick);
 
         // Prevent pinch-to-zoom
         document.addEventListener('gesturestart', function(e) {
@@ -218,8 +223,13 @@
 
         // iOS-specific fullscreen handling
         if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
-            video.addEventListener('webkitbeginfullscreen', function() {
-                video.play();
+            video1.addEventListener('webkitbeginfullscreen', function() {
+                video1.play();
+                video2.play();
+            });
+            video2.addEventListener('webkitbeginfullscreen', function() {
+                video1.play();
+                video2.play();
             });
         }
     </script>
