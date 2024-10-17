@@ -170,22 +170,10 @@
             overlay.hidden = true;
             video1.play();
             video2.play();
-            videoClick();
         }
 
         function videoClick(event) {
             if (event) event.preventDefault();
-            // Request fullscreen for all types of devices
-            const element = document.documentElement;
-            if (element.requestFullscreen) {
-                element.requestFullscreen();
-            } else if (element.mozRequestFullScreen) { // Firefox
-                element.mozRequestFullScreen();
-            } else if (element.webkitRequestFullscreen) { // Chrome, Safari and Opera
-                element.webkitRequestFullscreen();
-            } else if (element.msRequestFullscreen) { // IE/Edge
-                element.msRequestFullscreen();
-            }
 
             // Lock screen orientation to landscape
             if (screen.orientation && screen.orientation.lock) {
@@ -217,15 +205,13 @@
             e.preventDefault();
         });
 
-        // iOS-specific fullscreen handling
+        // iOS-specific handling
         if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
-            video1.addEventListener('webkitbeginfullscreen', function() {
-                video1.play();
+            video1.addEventListener('play', function() {
                 video2.play();
             });
-            video2.addEventListener('webkitbeginfullscreen', function() {
+            video2.addEventListener('play', function() {
                 video1.play();
-                video2.play();
             });
         }
     </script>
