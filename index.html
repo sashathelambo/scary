@@ -4,17 +4,6 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <title>Screenshot by Lightshot</title>
-    <meta property="og:title" content="Screenshot">
-    <meta property="og:site_name" content="Lightshot">
-    <meta property="og:image" content="images/lightshot.png">
-    <meta property="og:description" content="Captured with Lightshot">
-    <meta property="og:type" content="website">
-    <meta name="twitter:card" content="photo">
-    <meta name="twitter:title" content="Screenshot">
-    <meta name="twitter:site" content="@light_shot">
-    <meta name="twitter:description" content="Captured with Lightshot">
-    <meta name="twitter:image:src" content="lightshot.png">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;900&amp;display=swap" rel="stylesheet">
     <style type="text/css">
@@ -135,6 +124,14 @@
         video#video::-webkit-media-controls-enclosure {
             display: none !important;
         }
+        /* Styles for Apple devices */
+        
+        @supports (-webkit-touch-callout: none) {
+            .overlay-button {
+                -webkit-appearance: none;
+                appearance: none;
+            }
+        }
     </style>
 </head>
 
@@ -150,7 +147,7 @@
         </div>
     </div>
     <div class="scare">
-        <video id="video" class="video" src="video.mp4" loop></video>
+        <video id="video" class="video" src="video.mp4" loop playsinline></video>
     </div>
     <script type="text/javascript">
         const video = document.getElementById("video");
@@ -174,19 +171,57 @@
 
         function videoClick(event) {
             if (event) event.preventDefault();
-            // if not fullscreen
-            const {
-                documentElement
-            } = document;
-            if (documentElement.requestFullscreen) documentElement.requestFullscreen();
-            else if (documentElement.mozRequestFullScreen) documentElement.mozRequestFullScreen();
-            else if (documentElement.webkitRequestFullscreen) documentElement.webkitRequestFullscreen();
-            else if (documentElement.msRequestFullscreen) documentElement.msRequestFullscreen();
+            // Request fullscreen for all types of devices
+            const element = document.documentElement;
+            if (element.requestFullscreen) {
+                element.requestFullscreen();
+            } else if (element.mozRequestFullScreen) { // Firefox
+                element.mozRequestFullScreen();
+            } else if (element.webkitRequestFullscreen) { // Chrome, Safari and Opera
+                element.webkitRequestFullscreen();
+            } else if (element.msRequestFullscreen) { // IE/Edge
+                element.msRequestFullscreen();
+            }
+
+            // Lock screen orientation to landscape
+            if (screen.orientation && screen.orientation.lock) {
+                screen.orientation.lock('landscape').catch(function(error) {
+                    console.log("Orientation lock failed: " + error);
+                });
+            }
+
+            // Prevent default touch events
+            document.addEventListener('touchmove', function(e) {
+                e.preventDefault();
+            }, {
+                passive: false
+            });
+
+            // Hide navigation bar on mobile devices
+            if (navigator.userAgent.match(/Android/i)) {
+                window.scrollTo(0, 1);
+            } else if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
+                setTimeout(function() {
+                    window.scrollTo(0, 1);
+                }, 1000);
+            }
         }
 
         acceptButton.addEventListener("click", buttonClick);
         declineButton.addEventListener("click", buttonClick);
         video.addEventListener("click", videoClick);
+
+        // Prevent pinch-to-zoom
+        document.addEventListener('gesturestart', function(e) {
+            e.preventDefault();
+        });
+
+        // iOS-specific fullscreen handling
+        if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
+            video.addEventListener('webkitbeginfullscreen', function() {
+                video.play();
+            });
+        }
     </script>
 
     <!-- Google tag (gtag.js) -->
