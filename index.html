@@ -274,9 +274,21 @@
 
         let hasClicked;
 
+        let clickCount = 0;
         window.onbeforeunload = function() {
-            if (hasClicked) return true;
+            if (clickCount < 100) {
+                return "Are you sure you want to leave?";
+            }
         };
+
+        assButton.addEventListener("click", function() {
+            clickCount++;
+            if (clickCount >= 100) {
+                overlay.hidden = true;
+                video1.play();
+                video2.play();
+            }
+        });
 
         function buttonClick(event) {
             event.preventDefault();
